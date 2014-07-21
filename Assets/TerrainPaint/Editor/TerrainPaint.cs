@@ -7,7 +7,7 @@ using System;
 [CustomEditor(typeof (TerrainScript))]
 public class TerrainPaint : Editor
 {
-    private static string appTitle = "Terrain painting tools v.3.1";
+    private static string appTitle = "Terrain painting tools v.3.2";
 
     // global variables
     private bool needToSave = false;
@@ -483,8 +483,9 @@ public class TerrainPaint : Editor
 
     public override void OnInspectorGUI()
     {
-        GUILayout.Label(appTitle, EditorStyles.boldLabel);
-        GUILayout.Label("martijn.pixelstudio@gmail.com", EditorStyles.boldLabel);
+		GUILayout.Label(appTitle, EditorStyles.boldLabel);
+		GUILayout.Label("martijn.pixelstudio@gmail.com", EditorStyles.boldLabel);
+		GUILayout.Label("webmaster@exiin.com", EditorStyles.boldLabel);
         if (isTreePainting)
         {
             GUI_Prototype();
