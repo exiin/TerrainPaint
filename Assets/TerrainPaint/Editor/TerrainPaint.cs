@@ -344,8 +344,6 @@ public class TerrainPaint : Editor
     public override void OnInspectorGUI()
     {
 		GUILayout.Label(appTitle, EditorStyles.boldLabel);
-		GUILayout.Label("martijn.pixelstudio@gmail.com", EditorStyles.boldLabel);
-		GUILayout.Label("webmaster@exiin.com", EditorStyles.boldLabel);
          
             GUILayout.Label("Textures");
             currentMaterial = targetObject.renderer.sharedMaterial;
@@ -394,7 +392,9 @@ public class TerrainPaint : Editor
             {
                 GUILayout.Label("Shader type is not correct! unable to paint");
             }
-
+		
+		GUILayout.Label("Credit to : martijn.pixelstudio@gmail.com", EditorStyles.boldLabel);
+		GUILayout.Label("& webmaster@exiin.com", EditorStyles.boldLabel);
         
     }
  

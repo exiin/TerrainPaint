@@ -4,14 +4,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
-
-
+ 
+[ExecuteInEditMode] 
+[RequireComponent(typeof(MeshCollider))]
 public class TerrainScript : MonoBehaviour {
 	 
 	
 	private Vector2 SizeOfMesh;
-	
-	[SerializeField]	 
+	 
+	 
 	
 	public Vector2 getSizeOfMesh() {
 		if (SizeOfMesh == Vector2.zero) {
