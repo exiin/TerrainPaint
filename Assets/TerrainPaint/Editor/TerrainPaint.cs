@@ -20,18 +20,12 @@ public class TerrainPaint : Editor
     private static Texture2D brushTexture;
     private static float brushSize = 2;
     private static float hardness = 1f;
-    private static bool isPainting = false;
-    private static bool isTreePainting = false;
-    private static bool isTreeRemoving = false;
+    private static bool isPainting = false; 
     private TextureBrush currentTextureBrush;
-    private TreeBrush currentTreeBrush;
-    private TerrainPreview previewMesh;
     private static int currentSelectedBrush = 0;
-    private static int currentSelectedTexture = 1;
-    private static int currentSelectedPrototype = 0;
+    private static int currentSelectedTexture = 1; 
     private Texture2D[] sBrushTextures;
-    private Texture2D[] sTextures;
-    private Texture2D[] sObjectPreviews;
+    private Texture2D[] sTextures; 
     private GameObject newPrototype;
 
     public static int AspectSelectionGrid(int selected, Texture[] textures, int approxSize, GUIStyle style,
@@ -187,21 +181,7 @@ public class TerrainPaint : Editor
         } while (texture != null);
         sBrushTextures = list.ToArray(typeof (Texture2D)) as Texture2D[];
     }
-
-    private void LoadPrototypePreview()
-    {
-        TerrainScript terrain = ((TerrainScript) target);
-        ArrayList list = new ArrayList();
-        foreach (MyTreePrototype prototype in terrain.treePrototypes)
-        {
-			Texture2D preview = AssetPreview.GetAssetPreview(prototype.prefab);
-
-			preview = AssetPreview.GetAssetPreview(prototype.prefab);
-			preview = AssetPreview.GetAssetPreview(prototype.prefab); // hmm perhpas second time better ?
-            list.Add(preview);
-        }
-        sObjectPreviews = list.ToArray(typeof (Texture2D)) as Texture2D[];
-    }
+ 
 
     private void loadBrush()
     {
@@ -219,42 +199,6 @@ public class TerrainPaint : Editor
             currentTextureBrush.Dispose();
         currentTextureBrush = new TextureBrush();
         currentTextureBrush.Load(brushTexture, 64);
-    }
-
-    private void LoadTreeBrush()
-    {
-        if (currentTreeBrush == null)
-        {
-            currentTreeBrush = new TreeBrush();
-        }
-        previewMesh = new TerrainPreview();
-        if (((TerrainScript) target).treePrototypes.Count > 0)
-            previewMesh.CreatePreviewmesh(((TerrainScript) target).treePrototypes[currentSelectedPrototype].prefab);
-    }
-
-    private void paintTrees()
-    {
-        Event e = Event.current;
-        RaycastHit hit;
-        Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
-        if (Physics.Raycast(ray, out hit))
-        {
-            if (hit.collider.gameObject.name == target.name)
-            {
-                if (isTreeRemoving)
-                {
-                    TreeBrush.RemoveTrees(((TerrainScript) target), hit.point, true);
-                }
-                else
-                {
-                    TreeBrush.PlaceTrees(((TerrainScript) target), hit.point, hit.normal, currentSelectedPrototype);
-
-                }
-                previewMesh.changed = true;
-                EditorUtility.SetDirty(target);
-            }
-        }
-
     }
 
     private void paintOnTexture()
@@ -306,11 +250,6 @@ public class TerrainPaint : Editor
     private void UpdatePreviewBrush()
     {
         TerrainScript targetScript = ((TerrainScript) target);
-
-        if ((targetScript.treePrototypes.Count > 0) && (previewMesh != null))
-            previewMesh.UpdatePreviewMesh(targetScript.terrainData.treeInstances,
-                                          targetScript.treePrototypes[0].prefab.renderer.bounds.size.y);
-
 
         Vector3 normal = Vector3.zero;
         Vector3 hitPos = Vector3.zero;
@@ -400,120 +339,14 @@ public class TerrainPaint : Editor
         hardness = EditorGUILayout.Slider("brushHardness", hardness, 0.01f, 1f);
 
 
-    }
-
-    private void GUI_PrototypePreview()
-    {
-        bool flag;
-        if (sObjectPreviews == null)
-            LoadPrototypePreview();
-
-        currentSelectedPrototype = AspectSelectionGrid(currentSelectedPrototype, sObjectPreviews, 0x20, "gridlist",
-                                                       "No brushes defined.", out flag);
-        if (flag)
-        {
-            TreeBrush.selectedTree = currentSelectedPrototype;
-        }
-    }
-
-    private void GUI_Prototype()
-    {
-
-        newPrototype =
-            (GameObject) EditorGUILayout.ObjectField("Add prototype :", newPrototype, typeof (GameObject), false);
-        if (newPrototype != null)
-        {
-            if (GUILayout.Button("Add Treeprototype"))
-            {
-
-                string absolutePath = Application.dataPath + "/TerrainPrefabs/";
-                if (!Directory.Exists(absolutePath))
-                {
-                    Directory.CreateDirectory(absolutePath);
-                }
-                string relativePath = "Assets/TerrainPrefabs/TreePrototype" + target.name +
-                                      ((TerrainScript) target).treePrototypes.Count + 1 + ".prefab";
-                UnityEngine.Object newObj = PrefabUtility.CreateEmptyPrefab(relativePath);
-				GameObject pref = PrefabUtility.ReplacePrefab(newPrototype, newObj, ReplacePrefabOptions.Default);
-                ((TerrainScript) target).AddTreePrototype(pref);
-                EditorUtility.SetDirty(target);
-                AssetDatabase.SaveAssets();
-                LoadPrototypePreview();
-            }
-        }
-
-        if (GUILayout.Button("clear"))
-        {
-            ((TerrainScript) target).treePrototypes.Clear();
-            LoadPrototypePreview();
-
-        }
-
-
-    }
-
-    private void GuiTrees()
-    {
-        GUILayout.Label("Number of trees :" + ((TerrainScript) target).terrainData.treeInstances.Count);
-        if (currentTreeBrush != null)
-        {
-            TreeBrush.paintOnNormals = EditorGUILayout.Toggle("Use normals?", TreeBrush.paintOnNormals);
-            TreeBrush.brushSize = EditorGUILayout.Slider("Brushsize", TreeBrush.brushSize, 1f, 100f);
-            brushSize = TreeBrush.brushSize/10;
-            TreeBrush.spacing = EditorGUILayout.Slider("Spacing", TreeBrush.spacing, 0.1f, 10f);
-            TreeBrush.treeColorAdjustment = EditorGUILayout.Slider("Color adjustment", TreeBrush.treeColorAdjustment,
-                                                                   0.1f, 1f);
-            TreeBrush.treeHeight = EditorGUILayout.Slider("Height", TreeBrush.treeHeight, 0.2f, 20f);
-            TreeBrush.treeHeightVariation = EditorGUILayout.Slider("Height variation", TreeBrush.treeHeightVariation,
-                                                                   0.0f, 1f);
-            TreeBrush.treeWidth = EditorGUILayout.Slider("Width", TreeBrush.treeWidth, 1f, 3f);
-            TreeBrush.treeWidthVariation = EditorGUILayout.Slider("Width variation", TreeBrush.treeWidthVariation, 0.0f,
-                                                                  1f);
-            TreeBrush.treeRotationVariation = EditorGUILayout.Slider("Rotation variation",
-                                                                     TreeBrush.treeRotationVariation, 0.0f, 360f);
-        }
-
-        if (GUILayout.Button("Clear trees"))
-        {
-            ((TerrainScript) target).terrainData.ClearTrees();
-            previewMesh.changed = true;
-            EditorUtility.SetDirty(target);
-        }
-    }
-
+    }  
+ 
     public override void OnInspectorGUI()
     {
 		GUILayout.Label(appTitle, EditorStyles.boldLabel);
 		GUILayout.Label("martijn.pixelstudio@gmail.com", EditorStyles.boldLabel);
 		GUILayout.Label("webmaster@exiin.com", EditorStyles.boldLabel);
-        if (isTreePainting)
-        {
-            GUI_Prototype();
-            GUI_PrototypePreview();
-            GuiTrees();
-            if (GUILayout.Button("Stop placing trees"))
-            {
-                isTreePainting = false;
-                if (previewMesh != null)
-                    previewMesh.Dispose();
-            }
-
-        }
-        else
-        {
-            if (GUILayout.Button("Edit Trees"))
-            {
-                LoadBrushIcons();
-                loadBrush(0);
-                LoadTreeBrush();
-                LoadPrototypePreview();
-                isTreePainting = true;
-                isPainting = false;
-            }
-        }
-
-        if (!isTreePainting)
-        {
+         
             GUILayout.Label("Textures");
             currentMaterial = targetObject.renderer.sharedMaterial;
 
@@ -562,24 +395,9 @@ public class TerrainPaint : Editor
                 GUILayout.Label("Shader type is not correct! unable to paint");
             }
 
-        }
+        
     }
-
-    private void OnRenderObject()
-    {
-        if (mat == null)
-            mat = new Material(Shader.Find("Diffuse"));
-
-        foreach (MyTreeInstance t in ((TerrainScript) target).terrainData.treeInstances)
-        {
-            Mesh m =
-                ((TerrainScript) target).treePrototypes[t.prototypeIndex].prefab.GetComponent<MeshFilter>().sharedMesh;
-            Material mm = ((TerrainScript) target).treePrototypes[t.prototypeIndex].prefab.renderer.sharedMaterial;
-            Graphics.DrawMesh(m, t.position, t.rotation, mm, 0);
-        }
-
-
-    }
+ 
 
     private void DisableProjector()
     {
@@ -593,21 +411,15 @@ public class TerrainPaint : Editor
     {
         var ctrlID = GUIUtility.GetControlID(appTitle.GetHashCode(), FocusType.Passive);
 
-        isTreeRemoving = Input.GetKeyDown(KeyCode.LeftShift);
-
-        if ((isPainting) || (isTreePainting))
+ 
+        if ((isPainting) )
         {
             switch (Event.current.type)
             {
                 case EventType.mouseDrag:
                     if (Event.current.control || Event.current.command)
                     {
-                        if (Event.current.shift)
-                            isTreeRemoving = true;
-                        else
-                            isTreeRemoving = false;
-                        if (isTreePainting) paintTrees();
-                        if (isPainting) paintOnTexture();
+						if (isPainting) paintOnTexture();
                         Event.current.Use();
                     }
                     break;
@@ -624,8 +436,7 @@ public class TerrainPaint : Editor
             if (currentTextureBrush != null)
                 UpdatePreviewBrush();
         }
-
-        //OnRenderObject();
+ 
     }
 
     private void OnEnable()
@@ -636,17 +447,12 @@ public class TerrainPaint : Editor
     private void OnDisable()
     {
         CreateMixTexture();
-        isPainting = false;
-        isTreePainting = false;
+        isPainting = false; 
         if (currentTextureBrush != null)
         {
             currentTextureBrush.Dispose();
         }
-
-        if (previewMesh != null)
-        {
-            previewMesh.Dispose();
-        }
+ 
 
     }
 
