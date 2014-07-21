@@ -118,7 +118,7 @@ public class TerrainPreview
 		
 		Material m = new Material(previewShader);
 		
-		Texture2D preview = EditorUtility.GetAssetPreview(prefab);
+		Texture2D preview = AssetPreview.GetAssetPreview(prefab);
 		if (preview != null) {
 			Color background = preview.GetPixel(0,0);
 			for (int x = 0; x < preview.width; x++) {

@@ -5,8 +5,6 @@ Project("{755533A9-3869-F781-599F-7D16195F05BE}") = "TerrainPaint", "Assembly-CS
 EndProject
 Project("{755533A9-3869-F781-599F-7D16195F05BE}") = "TerrainPaint", "Assembly-CSharp-Editor.csproj", "{220A16CE-29F9-DD52-0B51-90D5C5ACE2AB}"
 EndProject
-Project("{755533A9-3869-F781-599F-7D16195F05BE}") = "TerrainPaint", "Assembly-UnityScript.unityproj", "{57390F6A-A5A8-8662-E791-805D2ED0415B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,15 +19,11 @@ Global
 		{220A16CE-29F9-DD52-0B51-90D5C5ACE2AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{220A16CE-29F9-DD52-0B51-90D5C5ACE2AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{220A16CE-29F9-DD52-0B51-90D5C5ACE2AB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57390F6A-A5A8-8662-E791-805D2ED0415B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57390F6A-A5A8-8662-E791-805D2ED0415B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57390F6A-A5A8-8662-E791-805D2ED0415B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57390F6A-A5A8-8662-E791-805D2ED0415B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-		GlobalSection(MonoDevelopProperties) = preSolution
+															GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
