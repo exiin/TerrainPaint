@@ -7,7 +7,7 @@ using System.Xml;
  
 [ExecuteInEditMode] 
 [RequireComponent(typeof(MeshCollider))]
-public class TerrainScript : MonoBehaviour {	 
+public class MeshPainter : MonoBehaviour {	 
 	
 	private Vector2 SizeOfMesh;
 	 

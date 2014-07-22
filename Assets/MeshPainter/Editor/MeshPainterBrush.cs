@@ -3,7 +3,7 @@ using UnityEditor;
 using System;
 using System.Collections;
 
-public class TextureBrush
+public class MeshPainterBrush
 {
     // Fields
     internal const int kMinBrushSize = 3;

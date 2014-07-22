@@ -4,10 +4,12 @@ using System.Collections;
 using System.IO;
 using System;
 
-[CustomEditor(typeof (TerrainScript))]
-public class TerrainPaint : Editor
-{
-    private static string appTitle = "Terrain painting tools v.3.2";
+[CustomEditor(typeof (MeshPainter))]
+public class MeshPainterEditor : Editor
+{ 
+	
+	private static string appTitle = "Mesh Painter v.1.0";
+	private static string subTitle = "Based on Terrain painting tools v.3.1"; 
 
     // global variables
     private bool needToSave = false;
@@ -21,7 +23,7 @@ public class TerrainPaint : Editor
     private static float brushSize = 2;
     private static float hardness = 1f;
     private static bool isPainting = false; 
-    private TextureBrush currentTextureBrush;
+    private MeshPainterBrush currentTextureBrush;
     private static int currentSelectedBrush = 0;
     private static int currentSelectedTexture = 1; 
     private Texture2D[] sBrushTextures;
@@ -188,7 +190,7 @@ public class TerrainPaint : Editor
         brushTexture = sBrushTextures[currentSelectedBrush];
         if (currentTextureBrush != null)
             currentTextureBrush.Dispose();
-        currentTextureBrush = new TextureBrush();
+        currentTextureBrush = new MeshPainterBrush();
         currentTextureBrush.Load(brushTexture, 64);
     }
 
@@ -197,7 +199,7 @@ public class TerrainPaint : Editor
         brushTexture = sBrushTextures[index];
         if (currentTextureBrush != null)
             currentTextureBrush.Dispose();
-        currentTextureBrush = new TextureBrush();
+        currentTextureBrush = new MeshPainterBrush();
         currentTextureBrush.Load(brushTexture, 64);
     }
 
@@ -249,7 +251,7 @@ public class TerrainPaint : Editor
 
     private void UpdatePreviewBrush()
     {
-        TerrainScript targetScript = ((TerrainScript) target);
+        MeshPainter targetScript = ((MeshPainter) target);
 
         Vector3 normal = Vector3.zero;
         Vector3 hitPos = Vector3.zero;
@@ -345,7 +347,7 @@ public class TerrainPaint : Editor
     {
 		GUILayout.Label(appTitle, EditorStyles.boldLabel);
          
-            GUILayout.Label("Textures");
+           // GUILayout.Label("Textures");
             currentMaterial = targetObject.renderer.sharedMaterial;
 
             if (currentMaterial.shader.name == "TerrainPaint/Lightmap-FirstPass")
@@ -391,10 +393,10 @@ public class TerrainPaint : Editor
             else
             {
                 GUILayout.Label("Shader type is not correct! unable to paint");
-            }
-		
-		GUILayout.Label("Credit to : martijn.pixelstudio@gmail.com", EditorStyles.boldLabel);
-		GUILayout.Label("& webmaster@exiin.com", EditorStyles.boldLabel);
+            } 
+
+		GUILayout.Label(subTitle); 
+
         
     }
  
