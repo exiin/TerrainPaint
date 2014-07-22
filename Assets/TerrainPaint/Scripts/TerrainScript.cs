@@ -7,13 +7,10 @@ using System.Xml;
  
 [ExecuteInEditMode] 
 [RequireComponent(typeof(MeshCollider))]
-public class TerrainScript : MonoBehaviour {
-	 
+public class TerrainScript : MonoBehaviour {	 
 	
 	private Vector2 SizeOfMesh;
 	 
-	 
-	
 	public Vector2 getSizeOfMesh() {
 		if (SizeOfMesh == Vector2.zero) {
 			MeshFilter mf = gameObject.GetComponent<MeshFilter>();
@@ -36,16 +33,6 @@ public class TerrainScript : MonoBehaviour {
 		return false;
 		
 	}   
-	 /*
-	void OnDrawGizmos()
-    {
-		if (terrainData != null) {
-	    	foreach (MyTreeInstance t in terrainData.treeInstances) {
-				Gizmos.DrawWireSphere(t.position,1f );
-			}
-		} 
-    }
-    */
 	
 }
 

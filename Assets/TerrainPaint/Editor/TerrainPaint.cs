@@ -68,8 +68,8 @@ public class TerrainPaint : Editor
             var path = EditorUtility.SaveFilePanel("Save texture as?", "", "mixTexture.png", "png");
             if (path.Length != 0)
             {
-                mixMap = new Texture2D(256, 256);
-                var c = new Color[256*256];
+                mixMap = new Texture2D(512, 512);
+                var c = new Color[512*512];
                 for (var i = 0; i < c.Length; i++)
                 {
                     c[i] = new Color(0, 0, 0, 0);
@@ -362,8 +362,7 @@ public class TerrainPaint : Editor
                     if (GUILayout.Button("Stop painting"))
                     {
                         if (currentTextureBrush != null)
-                            currentTextureBrush.Dispose();
-                        CreateMixTexture();
+                            currentTextureBrush.Dispose(); 
                         isPainting = false;
                     }
                 }
@@ -383,6 +382,7 @@ public class TerrainPaint : Editor
                     mixMap = currentMaterial.GetTexture("_Control") as Texture2D;
                     if (mixMap == null)
                     {
+						//Init texture
                         CreateMixTexture();
                     }
                 }
@@ -415,14 +415,18 @@ public class TerrainPaint : Editor
         if ((isPainting) )
         {
             switch (Event.current.type)
-            {
-                case EventType.mouseDrag:
+			{
+				case EventType.mouseDown:
+				case EventType.mouseDrag:
                     if (Event.current.control || Event.current.command)
                     {
 						if (isPainting) paintOnTexture();
                         Event.current.Use();
                     }
-                    break;
+					break;
+				case EventType.mouseUp:				
+					CreateMixTexture();
+					break;
                 case EventType.layout:
                     HandleUtility.AddDefaultControl(ctrlID);
                     break;
@@ -446,7 +450,6 @@ public class TerrainPaint : Editor
 
     private void OnDisable()
     {
-        CreateMixTexture();
         isPainting = false; 
         if (currentTextureBrush != null)
         {
