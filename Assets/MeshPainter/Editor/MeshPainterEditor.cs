@@ -191,7 +191,7 @@ public class MeshPainterEditor : Editor
         if (currentTextureBrush != null)
             currentTextureBrush.Dispose();
         currentTextureBrush = new MeshPainterBrush();
-        currentTextureBrush.Load(brushTexture, 64);
+        currentTextureBrush.Load(brushTexture, );
     }
 
     private void loadBrush(int index)
@@ -200,7 +200,7 @@ public class MeshPainterEditor : Editor
         if (currentTextureBrush != null)
             currentTextureBrush.Dispose();
         currentTextureBrush = new MeshPainterBrush();
-        currentTextureBrush.Load(brushTexture, 64);
+        currentTextureBrush.Load(brushTexture, 32);
     }
 
     private void paintOnTexture()
@@ -215,7 +215,7 @@ public class MeshPainterEditor : Editor
                 float xCenterNormalized = hit.textureCoord.x;
                 float yCenterNormalized = hit.textureCoord.y;
 
-				int size = (int) ( 64* brushSize );
+				int size = (int) ( 32* brushSize );
                 int num = Mathf.FloorToInt(xCenterNormalized*mixMap.width);
                 int num2 = Mathf.FloorToInt(yCenterNormalized*mixMap.height);
                 int num3 = Mathf.RoundToInt((float) size)/2;
@@ -282,8 +282,8 @@ public class MeshPainterEditor : Editor
             hitPos = hit.point;
             normal = hit.normal;
             float num4 = ((m_Size%2) != 0) ? 0.5f : 0f;
-            int alphamapWidth = 64;
-            int alphamapHeight = 64;
+            int alphamapWidth = 32;
+            int alphamapHeight = 32;
             vector.x = (Mathf.Floor(hit.textureCoord.x*alphamapWidth) + num4)/((float) alphamapWidth);
             vector.y = (Mathf.Floor(hit.textureCoord.y*alphamapHeight) + num4)/((float) alphamapHeight);
             vector2.x = vector.x*-terrainSizeX + (terrainSizeX/2);
